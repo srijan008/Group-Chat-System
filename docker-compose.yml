@@ -1,0 +1,36 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./.config/backend/Dockerfile  
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./server/.env
+    volumes:
+      - backend-data:/app/data
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./.config/frontend/Dockerfile  
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./front/.env
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./.config/nginx/Dockerfile 
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  backend-data:
